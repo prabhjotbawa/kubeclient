@@ -1,0 +1,17 @@
+{
+  "devDependencies": {
+    "@babel/preset-env": "^7.26.9",
+    "@kubernetes/client-node": "^1.0.0",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0"
+  },
+  "type": "module",
+  "jest": {
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    },
+    "transformIgnorePatterns": [
+      "node_modules/(?!(@kubernetes/client-node|openid-client|oauth4webapi)/.*)"
+    ]
+  }
+}
