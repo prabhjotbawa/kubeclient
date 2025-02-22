@@ -15,3 +15,13 @@ To use ES modules, two things are required
     ]
 ```
 Note: Adjust the node_modules as needed but adding any clients that throw an export error to it.
+
+# Build project
+```commandline
+make build
+```
+
+# Test
+```commandline
+make test
+```

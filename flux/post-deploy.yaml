@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: post-deploy-test
+  annotations:
+    fluxcd.io/automated: "true"
+    kustomize.toolkit.fluxcd.io/dependsOn: "helm.toolkit.fluxcd.io/helmrelease.sample-app"
+spec:
+  template:
+    spec:
+      serviceAccountName: test-runner
+      containers:
+      - name: test
+        image: curlimages/curl:latest
+        command: 
+        - /bin/sh
+        - -c
+        - |
+          # Wait for service to be ready
+          sleep 30
+          # Test HTTP endpoint
+          curl -f http://sample-app-nginx.default.svc.cluster.local
+          # Add more test commands as needed
+      restartPolicy: Never
+  backoffLimit: 3
