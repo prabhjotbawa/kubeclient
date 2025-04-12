@@ -26,6 +26,9 @@ make build
 make test
 ```
 
+# Reports
+The reports are pushed to `gh-pages`branch and be viewed on the pages.
+
 ## Flux
 The [folder](./flux/) contains all the files needed to istall the helmrelease, It has a kustomization file however is useful for the operator to reconcile from a repo.
 
