@@ -14,7 +14,10 @@
       {
         "includeConsoleLog": true
       }
-    ]
+    ],
+    ["./JestMetricsReporter.js", {
+      "mongoUrl": "mongodb://localhost:27017"
+    }]
   ],
   "collectCoverage": true,
   "coverageDirectory": "./coverage",

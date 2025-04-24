@@ -45,3 +45,36 @@ helmreposiotry applies the chart
 helmrelease create a release which is an instance of the chart hence the app gets deployed.
 
 flux will look at the kustomization and apply the files in the order specificied. Since the job `depends On` the helm release, flux will only install if the release was successful.
+
+## Build and Run mongodb dockerimage
+```commandline
+docker build -t local-mongodb .
+docker run -d --name mongodb -p 27017:27017 -v $(pwd)/data:/data/db local-mongodb
+```
+
+## Connect to mongodb locally
+Install mongosh
+
+`brew install mongosh`
+
+```commandline
+mongosh --host localhost --port 27017
+```
+
+# List databases
+show dbs
+
+# Switch to jestMetrics database
+use jestMetrics
+
+# Show collections
+show collections
+
+# Query test results
+db.testResults.find()
+
+# Pretty print results
+db.testResults.find().pretty()
+
+# Count documents
+db.testResults.countDocuments()
