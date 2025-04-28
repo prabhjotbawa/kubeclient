@@ -1,0 +1,37 @@
+# Version control
+.git
+.gitignore
+
+# Node.js dependencies
+node_modules
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Test files
+coverage
+test-reports
+
+# Environment files
+.env
+.env.*
+
+# Development files
+*.md
+*.log
+.vscode
+.idea
+
+# Docker files
+Dockerfile
+build.Dockerfile
+.dockerignore
+docker-compose*
+
+# Temporary files
+.DS_Store
+*.tmp
+*.temp
+
+# Code
+resources

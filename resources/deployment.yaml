@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: github-auth
+type: Opaque
+data:
+  GITHUB_TOKEN: Z2l0aHViX3BhdF8xMUFLREVYNkkwWU94ZEVOQ3dia0FFX1pSdEdmM0ljN2dwaHp0ZGJmVklQMThoYXlrMFJ5Qkh1SXVoQ29vdldUaW9YT1FVS1ZMQVRjdnhJSEhiCg==
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: test-reporter-sa
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: test-reporter-role
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services", "namespaces", "persistentvolumeclaims", "persistentvolumes", "events"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: test-reporter-binding
+subjects:
+- kind: ServiceAccount
+  name: test-reporter-sa
+  namespace: default
+roleRef:
+  kind: ClusterRole
+  name: test-reporter-role
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: test-reporter
+spec:
+  backoffLimit: 1
+  completions: 1
+  ttlSecondsAfterFinished: 3600
+  template:
+    metadata:
+      labels:
+        app: test-reporter
+    spec:
+      restartPolicy: OnFailure
+      serviceAccountName: test-reporter-sa
+      containers:
+      - name: test-reporter
+        image: prabhjotbawa/kubeclient:latest
+        imagePullPolicy: IfNotPresent
+        command: ["/bin/bash"]
+        args: ["-c", "cd /app && NODE_OPTIONS='--experimental-vm-modules' npx jest"]
+        env:
+        - name: GITHUB_REPOSITORY_OWNER
+          value: "prabhjotbawa"
+        - name: GITHUB_REPOSITORY_NAME
+          value: "kubeclient"
+        - name: GITHUB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: github-auth
+              key: GITHUB_TOKEN
+        volumeMounts:
+        - name: test-reports
+          mountPath: /app/test-reports
+      volumes:
+      - name: test-reports
+        emptyDir: {}
